@@ -6,21 +6,20 @@ import csv
 from time import time
 from datetime import datetime
 
-from tfutils import windowed_dataset, MyCallback
+from tfutils import windowed_dataset, MyCallbackStopTraining, model_checkpoint_callback
 from models import m40_rnn_min_temp
 
 
 TRAIN_SPLIT = .75
-N_EPOCHS = 25
-WINDOW_SIZE = 5
-MODEL = 'rnn'
+N_EPOCHS = 200
+WINDOW_SIZE = 10
+MODEL = 'cnn'
 MODEL_NAME = MODEL + '_' + str(int(time()))
 SAVE_MODEL = True
 PLOTS = True
 
-METRIC = 'mae'
-TARGET_CALLBACK = 1.5
-TARGET_SAVE = 3
+TARGET_MAE_CALLBACK = 0.0   # set to 0.0 to prevent training stop
+TARGET_MAE_SAVE = 3
 
 
 def main():
@@ -40,13 +39,17 @@ def main():
 
     # (2) train model
     model = m40_rnn_min_temp.Model(MODEL, WINDOW_SIZE).get_model()
-    callbacks = MyCallback(metric='mae', greater=False, target=1.5)
+    checkpoint_filepath = '/tmp/checkpoint_weights'
+    callbacks = [
+        MyCallbackStopTraining(metric='mae', greater=False, target=TARGET_MAE_CALLBACK),
+        model_checkpoint_callback(checkpoint_filepath=checkpoint_filepath, monitor='val_loss', mode='min')]
     model.summary()
     opt = tf.keras.optimizers.Adam(lr=1e-5)
     model.compile(optimizer=opt, loss='mae', metrics=['mae'])
     start = time()
-    history = model.fit(ds_train, validation_data=ds_test, epochs=N_EPOCHS, callbacks=[callbacks], verbose=1)
+    history = model.fit(ds_train, validation_data=ds_test, epochs=N_EPOCHS, callbacks=callbacks, verbose=1)
     training_time = np.round(time() - start, 2)
+    model.load_weights(checkpoint_filepath)
 
     # predict on test data:
     y_pred = model.predict(ds_test).flatten()
@@ -58,14 +61,15 @@ def main():
     print('testing mae=' + str(np.round(mae, 5)) + '\n')
 
     # save model
-    if mae < TARGET_SAVE and SAVE_MODEL:
+    if mae < TARGET_MAE_SAVE and SAVE_MODEL:
         model.save('saved_models/' + MODEL_NAME)
         print('saved model as {}'.format(MODEL_NAME))
 
     if PLOTS:
         # plot training
-        plt.plot(history.epoch, history.history['loss'])
-        plt.plot(history.epoch, history.history['val_loss'], color='orange')
+        plot_start = 30
+        plt.plot(history.epoch[plot_start:], history.history['loss'][plot_start:])
+        plt.plot(history.epoch[plot_start:], history.history['val_loss'][plot_start:], color='orange')
         plt.title('training loss')
         plt.savefig('results/' + MODEL_NAME + '_loss.png')
         print('saved plot: ' + 'results/' + MODEL_NAME + '_loss.png')

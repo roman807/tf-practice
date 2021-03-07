@@ -28,9 +28,11 @@ class Model:
         # trains quicker, better results
         return tf.keras.Sequential([
             tf.keras.layers.Lambda(lambda x: tf.expand_dims(x, -1), input_shape=[self.window_size]),
-            tf.keras.layers.Conv1D(20, kernel_size=3, activation='relu'),
+            tf.keras.layers.Conv1D(40, kernel_size=3, activation='relu'),
+            tf.keras.layers.Conv1D(40, kernel_size=3, activation='relu'),
             tf.keras.layers.Flatten(),
             tf.keras.layers.Dense(100, activation='relu'),
+            tf.keras.layers.Dense(50, activation='relu'),
             tf.keras.layers.Dense(1),
             tf.keras.layers.Lambda(lambda x: x * 10.0)
         ])
