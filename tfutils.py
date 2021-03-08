@@ -1,11 +1,12 @@
 import tensorflow as tf
 import os
+import shutil
 
 
 def windowed_dataset(series, window_size=5, batch_size=20, shuffle=True, shuffle_buffer=1000):
     ds = tf.data.Dataset.from_tensor_slices(series)
     ds = ds.window(window_size + 1, shift=1, drop_remainder=True)
-    ds = ds.flat_map(lambda w: w.batch(window_size +1))
+    ds = ds.flat_map(lambda w: w.batch(window_size + 1))
     if shuffle:
         ds = ds.shuffle(shuffle_buffer)
     ds = ds.map(lambda w: (w[:-1], w[-1]))
@@ -40,3 +41,9 @@ def model_checkpoint_callback(checkpoint_filepath, monitor, mode):
         mode=mode,
         save_best_only=True
     )
+
+
+def clear_path(path):
+    if os.path.isdir(path):
+        shutil.rmtree(path)
+    return path

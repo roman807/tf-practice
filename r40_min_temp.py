@@ -11,7 +11,7 @@ from models import m40_rnn_min_temp
 
 
 TRAIN_SPLIT = .75
-N_EPOCHS = 200
+N_EPOCHS = 2
 WINDOW_SIZE = 10
 MODEL = 'cnn'
 MODEL_NAME = MODEL + '_' + str(int(time()))
