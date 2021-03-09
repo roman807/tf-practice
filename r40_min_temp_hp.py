@@ -13,7 +13,7 @@ from models import m40_rnn_min_temp
 
 TRAIN_SPLIT = .75
 N_EPOCHS = 80
-WINDOW_SIZE = 20
+WINDOW_SIZE = 10
 
 FIND_LR = False
 LR_START = 1.0e-6
@@ -32,12 +32,6 @@ OPTIMIZERS = {
     # 'adam04': tf.keras.optimizers.Adam(lr=1e-4),
     'adam05': tf.keras.optimizers.Adam(lr=5e-5),
     # 'sgd05': tf.keras.optimizers.SGD(lr=5e-5)
-}
-# todo: next: try different window sizes
-WINDOW_SIZES = {
-    '5': 5,
-    '10': 10,
-    '20': 20
 }
 
 
@@ -81,8 +75,8 @@ def main():
     # (2a) find learning rate
     if FIND_LR:
         callbacks = tf.keras.callbacks.LearningRateScheduler(lambda epoch: LR_START * 10**(epoch/20))
-        # opt = tf.keras.optimizers.Adam(learning_rate=LR_START)
-        opt = tf.keras.optimizers.SGD(learning_rate=LR_START)
+        opt = tf.keras.optimizers.Adam(learning_rate=LR_START)
+        # opt = tf.keras.optimizers.SGD(learning_rate=LR_START)
         _, hist = train_model(ds_train, ds_test, 'cnn', opt, [callbacks])
         lrs = LR_START * (10 ** (np.arange(N_EPOCHS) / 20))
         plt.semilogx(lrs, hist.history["loss"])
