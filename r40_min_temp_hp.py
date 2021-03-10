@@ -115,7 +115,6 @@ def main():
         print('\n')
 
         # (4) save best model:
-        #todo: seems to save the wrong model
         mae_ = {k: results[k]['mae'] for k in results.keys()}
         model_name = [k for k, v in mae_.items() if v == min(mae_.values())][0]
         results[model_name]['model'].save('saved_models/' + model_name)
