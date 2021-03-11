@@ -67,8 +67,10 @@ class Model:
     def model_lstm_bd(self):
         return tf.keras.Sequential([
             tf.keras.layers.Embedding(self.vocab_size, self.embed_size),
-            tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(50, activation='tanh', return_sequences=True)),
-            tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(50, activation='tanh', return_sequences=False)),
+            tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(60, activation='tanh', return_sequences=True)),
+            tf.keras.layers.Dropout(0.2),
+            tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(30, activation='tanh', return_sequences=False)),
+            tf.keras.layers.Dropout(0.2),
             tf.keras.layers.Dense(40, activation='relu'),
             tf.keras.layers.Dense(1, activation='sigmoid')
         ])

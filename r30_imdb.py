@@ -34,7 +34,7 @@ def main():
     test_sequences = tokenizer.texts_to_sequences(test_sentences)
     test_sequences = pad_sequences(test_sequences, maxlen=MAX_LEN, padding='post', truncating='post')
 
-    model = m30_imdb.Model('rnn', NUM_WORDS, EMBED_SIZE).get_model()
+    model = m30_imdb.Model('lstm1', NUM_WORDS, EMBED_SIZE).get_model()
     opt = tf.keras.optimizers.Adam(lr=1e-4)
     model.compile(optimizer=opt, loss='binary_crossentropy', metrics=['accuracy'])
     model.fit(train_sequences, train_labels, validation_data=(test_sequences, test_labels), epochs=N_EPOCHS,

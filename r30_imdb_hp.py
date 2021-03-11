@@ -15,7 +15,7 @@ from models import m30_imdb
 NUM_WORDS = 5000
 EMBED_SIZE = 20
 MAX_LEN = 80
-N_EPOCHS = 25
+N_EPOCHS = 10
 
 FIND_LR = False
 LR_START = 1.0e-6
@@ -25,11 +25,12 @@ COLORS = ['grey', 'blue', 'green', 'black', 'orange', 'red']
 
 MODELS = {
     'simple': 'simple',
-    'cnn': 'cnn',
+    # 'cnn': 'cnn',
     # 'lstm1': 'lstm1',
     # 'lstm2': 'lstm2',
-    'gru1': 'gru1'
-    # 'lstm_bd': 'lstm_bd'
+    # 'gru1': 'gru1',
+    # 'gru_do': 'gru_do',
+    'lstm_bd': 'lstm_bd'
 }
 OPTIMIZERS = {
     'adam04': tf.keras.optimizers.Adam(lr=1e-4),
