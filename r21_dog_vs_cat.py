@@ -17,14 +17,15 @@ from models import m21_cnn_dog_vs_cat
 from tfutils import MyCallbackStopTraining
 
 
-N_EPOCHS = 5
-MODEL = 'cnn_large'
+N_EPOCHS = 60
+MODEL = 'cnn2'
+AUGMENT = True
 MODEL_NAME = MODEL + '_' + str(int(time()))
 SAVE_MODEL = True
 PLOTS = True
 
 TARGET_ACC_CALLBACK = .9
-TARGET_ACC_SAVE = .8
+TARGET_ACC_SAVE = .7
 
 
 # next: image augmentation, loop for hyper-parameter search
@@ -33,15 +34,20 @@ def main():
     train_dir = 'data/dog_vs_cat/dataset/training_set'
     test_dir = 'data/dog_vs_cat/dataset/test_set'
 
-    data_gen = ImageDataGenerator(rescale=1/255.0)
-    train_data_gen = data_gen.flow_from_directory(train_dir, target_size=(28, 28), batch_size=20)
+    data_gen = ImageDataGenerator(rescale=1 / 255.0)
+    if AUGMENT:
+        data_gen_train = ImageDataGenerator(rescale=1 / 255.0, rotation_range=40, zoom_range=.2, shear_range=.2,
+                                            width_shift_range=.2, height_shift_range=.2, vertical_flip=True)
+        train_data_gen = data_gen_train.flow_from_directory(train_dir, target_size=(28, 28), batch_size=20)
+    else:
+        train_data_gen = data_gen.flow_from_directory(train_dir, target_size=(28, 28), batch_size=20)
     test_data_gen = data_gen.flow_from_directory(test_dir, target_size=(28, 28), batch_size=20)
 
     # (2) train model:
     model = m21_cnn_dog_vs_cat.Model(MODEL, input_shape=(28, 28, 3)).get_model()
     model.summary()
     opt = tf.keras.optimizers.Adam(lr=1.0e-3)
-    model.compile(loss='binary_crossentropy', optimizer=opt, metrics=['accuracy'])
+    model.compile(loss='binary_crossentropy', optimizer=opt, metrics=['acc'])
     callback = MyCallbackStopTraining(target=TARGET_ACC_CALLBACK)
     start = time()
     history = model.fit(train_data_gen, validation_data=test_data_gen, epochs=N_EPOCHS, callbacks=[callback], verbose=1)
@@ -62,8 +68,8 @@ def main():
         plt.plot(history.epoch, history.history['loss'])
         plt.plot(history.epoch, history.history['val_loss'], color='orange')
         plt.title('training loss')
-        plt.savefig('results/' + MODEL_NAME + '_loss.png')
-        print('saved plot: ' + 'results/' + MODEL_NAME + '_loss.png')
+        plt.savefig('results/' + MODEL_NAME + '_loss_dvc.png')
+        print('saved plot: ' + 'results/' + MODEL_NAME + '_loss_dvc.png')
     print('----------')
 
 

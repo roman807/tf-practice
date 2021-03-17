@@ -14,7 +14,7 @@ def windowed_dataset(series, window_size=5, batch_size=20, shuffle=True, shuffle
 
 
 class MyCallbackStopTraining(tf.keras.callbacks.Callback):
-    def __init__(self, metric='accuracy', greater=True, target=.99):
+    def __init__(self, metric='acc', greater=True, target=.99):
         super().__init__()
         self.metric = metric
         self.greater = greater

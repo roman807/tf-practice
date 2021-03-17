@@ -7,6 +7,8 @@ class Model:
         self.model = None
         if model_type == 'cnn':
             self.model = self.model_cnn()
+        if model_type == 'cnn2':
+            self.model = self.model_cnn2()
         if model_type == 'cnn_large':
             self.model = self.model_cnn_large()
 
@@ -15,7 +17,6 @@ class Model:
 
     def model_cnn(self):
         return tf.keras.Sequential([
-            # tf.keras.layers.Lambda(lambda x: tf.expand_dims(x, -1), input_shape=self.input_shape),
             tf.keras.layers.Conv2D(40, kernel_size=(5, 5), activation='relu', input_shape=self.input_shape),
             tf.keras.layers.MaxPool2D((2, 2)),
             tf.keras.layers.Conv2D(40, kernel_size=(3, 3), activation='relu'),
@@ -25,9 +26,20 @@ class Model:
             tf.keras.layers.Dense(2, activation='softmax')
         ])
 
+    def model_cnn2(self):
+        return tf.keras.Sequential([
+            tf.keras.layers.Conv2D(30, kernel_size=(3, 3), activation='relu', input_shape=self.input_shape),
+            tf.keras.layers.MaxPool2D((2, 2)),
+            tf.keras.layers.Conv2D(60, kernel_size=(3, 3), activation='relu'),
+            tf.keras.layers.MaxPool2D((2, 2)),
+            tf.keras.layers.Flatten(),
+            tf.keras.layers.Dense(80, activation='relu'),
+            tf.keras.layers.Dropout(.2),
+            tf.keras.layers.Dense(2, activation='softmax')
+        ])
+
     def model_cnn_large(self):
         return tf.keras.Sequential([
-            # tf.keras.layers.Lambda(lambda x: tf.expand_dims(x, -1), input_shape=self.input_shape),
             tf.keras.layers.Conv2D(80, kernel_size=(5, 5), activation='relu', input_shape=self.input_shape),
             tf.keras.layers.MaxPool2D((2, 2)),
             tf.keras.layers.Conv2D(80, kernel_size=(3, 3), activation='relu'),
