@@ -47,3 +47,9 @@ def clear_path(path):
     if os.path.isdir(path):
         shutil.rmtree(path)
     return path
+
+
+def create_path_if_not_exists(path):
+    if not os.path.exists(path):
+        os.mkdir(path)
+    return path

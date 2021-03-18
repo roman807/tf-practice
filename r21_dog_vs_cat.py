@@ -41,7 +41,7 @@ def main():
         train_data_gen = data_gen_train.flow_from_directory(train_dir, target_size=(28, 28), batch_size=20)
     else:
         train_data_gen = data_gen.flow_from_directory(train_dir, target_size=(28, 28), batch_size=20)
-    test_data_gen = data_gen.flow_from_directory(test_dir, target_size=(28, 28), batch_size=20)
+    test_data_gen = data_gen.flow_from_directory(test_dir, target_size=(28, 28), batch_size=40)
 
     # (2) train model:
     model = m21_cnn_dog_vs_cat.Model(MODEL, input_shape=(28, 28, 3)).get_model()

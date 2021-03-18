@@ -28,7 +28,7 @@ def get_data(augment):
         train_data_gen = data_gen_train.flow_from_directory(train_dir, target_size=(28, 28), batch_size=20)
     else:
         train_data_gen = data_gen.flow_from_directory(train_dir, target_size=(28, 28), batch_size=20)
-    test_data_gen = data_gen.flow_from_directory(test_dir, target_size=(28, 28), batch_size=20)
+    test_data_gen = data_gen.flow_from_directory(test_dir, target_size=(28, 28), batch_size=40)
     return train_data_gen, test_data_gen
 
 
@@ -45,9 +45,8 @@ def train_model(train_data_gen, test_data_gen, model, opt, callbacks=[]):
     return model, history
 
 
-# next: image augmentation, loop for hyper-parameter search
 def main():
-    # next: use DSVM N-series, add regularization, use transfer learning
+    # add regularization, use transfer learning
     # # confirm that GPU is used:
     # print(tf.config.list_physical_devices('GPU'))
     results = defaultdict(dict)
