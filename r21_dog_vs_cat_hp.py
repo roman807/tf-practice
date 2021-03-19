@@ -1,3 +1,5 @@
+# dog vs. cat classifier with hyper parameter tuning
+
 import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import numpy as np

@@ -26,6 +26,7 @@ def main():
     opt = tf.keras.optimizers.Adam(lr=1.0e-3)
     model.compile(loss='sparse_categorical_crossentropy', optimizer=opt, metrics=['acc'])
     start = time()
+    model.save('saved_models/' + MODEL_NAME)
     weights_dir = create_path_if_not_exists('saved_weights/' + MODEL_NAME)
     callback = model_checkpoint_callback(weights_dir, monitor='val_acc', mode='max')
     history = model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=N_EPOCHS, verbose=1,
