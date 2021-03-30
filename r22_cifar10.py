@@ -32,6 +32,7 @@ def main():
     history = model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=N_EPOCHS, verbose=1,
                         callbacks=[callback])
     training_time = np.round(time() - start, 2)
+    model.load_weights(weights_dir)
 
     # (3) predict on test data:
     loss, acc = model.evaluate(x_test, y_test)

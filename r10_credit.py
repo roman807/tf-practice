@@ -25,6 +25,7 @@ TARGET_F1_SAVE = .7
 
 def main():
     # (1) prepare data
+    # https://www.kaggle.com/mlg-ulb/creditcardfraud
     ds = pd.read_csv('data/creditcard.csv').drop(['Time', 'Amount'], axis=1).to_numpy()
     split = int(TRAIN_SPLIT * ds.shape[0])
     x_train = ds[:split, :-1]
