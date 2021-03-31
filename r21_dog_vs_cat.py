@@ -1,4 +1,4 @@
-# dog vs. cat classifier
+# dog vs. cat classifier, data: https://www.kaggle.com/c/dogs-vs-cats/data
 
 # to download data to remote machine with kaggle api:
 # (1) Log in to machine: ssh [user]@[IP-address]

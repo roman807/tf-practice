@@ -15,7 +15,7 @@ SAVE_MODEL = True
 PLOTS = True
 
 # transfer learning parameters:
-MODEL_NAME_ORIGINAL = 'cnn_1616132484'
+MODEL_NAME_ORIGINAL = 'CIFAR001'
 LAST_LAYER_IND = -3
 
 TARGET_ACC_CALLBACK = .99
@@ -27,7 +27,7 @@ def main():
     # (1) create model:
     pre_trained_model = tf.keras.models.load_model('saved_models/' + MODEL_NAME_ORIGINAL)
     pre_trained_model.summary()
-    pre_trained_model.load_weights('saved_weights/' + MODEL_NAME_ORIGINAL)
+    # pre_trained_model.load_weights('saved_weights/' + MODEL_NAME_ORIGINAL) # not necessary if model saved with best weights
     for layer in pre_trained_model.layers:
         layer.trainable = False
     pre_trained_model.summary()
